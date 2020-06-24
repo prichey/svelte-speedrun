@@ -1,0 +1,370 @@
+import { FullScreenCode } from 'mdx-deck'
+import { future, highlight } from '@mdx-deck/themes'
+
+import Layout from './components/layout';
+
+import svelteHome from './img/svelte-home.png';
+import mdnLabel from './img/mdn-label.png';
+
+export const theme = {
+  ...future,
+  ...highlight
+}
+
+# svelte speedrun
+### 06/24/20
+
+---
+
+<Layout>
+
+# svelte?
+
+<img src={svelteHome} />
+
+</Layout>
+
+---
+
+# svelte!
+
+* JS framework and compiler
+* optimizes your code at build-time
+  * less code
+  * better performance
+  * smaller applications
+
+--- 
+
+>>> # frameworks are not tools for organizing your code, they are tools for organizing your mind
+- Rich Harris, [Rethinking Reactivity](https://www.youtube.com/watch?v=AdNJ3fydeao)
+
+---
+
+# A Component!
+
+```svelte
+// HelloWorld.svelte
+<p>Hello World</p>
+```
+
+---
+
+# Using a component!
+
+```svelte
+// HelloWorld.svelte
+<p>Hello World</p>
+```
+
+```
+// App.svelte
+import HelloWorld from './HelloWorld.svelte';
+
+<HelloWorld />
+```
+
+---
+
+# JS!
+
+```svelte
+// HelloPostlight.svelte
+<script>
+  const name = 'Postlight';
+</script>
+
+<p>Hello {name}</p> // => 'Hello Postlight'
+```
+
+---
+
+# CSS!
+
+```svelte
+// HelloPostlight.svelte
+<script>
+  const name = 'Postlight';
+</script>
+
+<style>
+  p {
+    color: pink;
+  }
+</style>
+
+<p>Hello {name}</p> // => 'Hello Postlight' (in pink!)
+```
+
+---
+
+# Namespaced CSS!
+
+```svelte
+// Foo.svelte
+<style>
+  p { color: pink; }
+</style>
+
+<p>Foo</p>
+```
+
+```svelte
+// Bar.svelte
+<style>
+  p { color: green; }
+</style>
+
+<p>Bar</p>
+```
+
+```svelte
+// App.svelte
+<style>
+  p { color: blue; }
+</style>
+
+<p>Hello!</p> // blue
+<Foo /> // pink
+<Bar /> // green
+```
+
+--- 
+
+# event handlers!
+
+```svelte
+// Button.svelte
+<script>
+  let count = 0;
+
+  const handleClick = () => count += 1;
+</script>
+
+<button on:click={handleClick}>Count: {count}</button>
+```
+
+--- 
+
+# event handlers!
+
+```svelte
+// Button.svelte
+<script>
+  let count = 0;
+</script>
+
+<button on:click={() => count += 1}>Count: {count}</button>
+```
+
+--- 
+
+# event handlers ctd.
+
+```svelte
+// Input.svelte
+<script>
+  let val = '';
+
+  const handleInput = (event) => {
+    val = event.target.value;
+  }
+</script>
+
+<input value={val} on:input={handleInput} />
+```
+
+--- 
+
+# bindings!
+
+```svelte
+// Input.svelte
+<script>
+  let val = '';
+</script>
+
+<input bind:value={val} />
+```
+
+--- 
+
+# reactive statements !
+
+```svelte
+// Input.svelte
+<script>
+  let val = '';
+
+  $: document.title = val;
+</script>
+
+<input bind:value={val} />
+```
+
+---
+
+<Layout>
+
+# an aside: labels
+
+<img src={mdnLabel} />
+
+</Layout>
+
+---
+
+# reactive statements!
+
+```svelte
+// Input.svelte
+<script>
+  let val = '';
+
+  // if assignment to an undeclared variable, 
+  // Svelte will inject a let declaration
+  $: reverseVal: val.split("").reverse().join("");
+
+  $: {
+    console.log(val);
+    console.log(reverseVal);
+  }
+</script>
+
+<input bind:value={val} />
+```
+
+---
+
+# doubly reactive statements!
+
+```svelte
+// Input.svelte
+<script>
+  let val = '';
+
+  $: reverseVal: val.split("").reverse().join("");
+
+  // updates document.title whenever reverseVal changes
+  $: document.title = reverseVal;
+</script>
+
+<input bind:value={val} />
+```
+
+---
+
+# props!
+
+```svelte
+// Person.svelte
+<script>
+  export let name;
+
+  // Values that are passed in as props
+  // are immediately available
+  console.log({ name });
+</script>
+```
+
+---
+
+# using props
+
+```svelte
+// Person.svelte
+<script>
+  export let name;
+  console.log({ name });
+</script>
+```
+
+```svelte
+// App.svelte
+<script>
+  import Person from './Person.svelte';
+</script>
+
+<Person name="Preston" />
+```
+
+---
+
+# templates
+
+```svelte
+// Show.svelte
+<script>
+  export let show = false;
+</script>
+
+{#if show}
+  <p>👋</p>
+{:else}
+  <p>🙈</p>
+{/if}
+```
+
+---
+
+# react suspense who?
+
+```svelte
+<script>
+  const promise = fetch('/endpoint');
+</script>
+
+{#await promise}
+  // promise is pending
+  <p>waiting for the promise to resolve...</p>
+{:then value}
+  // promise was fulfilled
+  <p>The value is {value}</p>
+{:catch error}
+  // promise was rejected
+  <p>Something went wrong: {error.message}</p>
+{/await}
+```
+
+---
+
+# lifecycle
+
+```svelte
+// Mountie.svelte
+<script>
+  import { onMount } from 'svelte';
+
+  onMount(() => {
+    console.log('mounted');
+  });
+</script>
+```
+
+* beforeUpdate
+* afterUpdate
+* onDestroy
+
+---
+
+# lots more!
+
+* `<svelte:head>`
+* svelte/store
+* svelte/motion
+* svelte/transition
+* svelte/animate
+* svelte/easing
+* etc. etc. etc.
+
+---
+
+# what's not to like?
+
+* no TS support (yet!)
+* no mdx-deck
+* smaller community, doesn't have critical mass of React
+
+---
+
+# thanks!
