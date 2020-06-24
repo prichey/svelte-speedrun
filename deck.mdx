@@ -208,7 +208,7 @@ import HelloWorld from './HelloWorld.svelte';
 
   // if assignment to an undeclared variable, 
   // Svelte will inject a let declaration
-  $: reverseVal: val.split("").reverse().join("");
+  $: reverseVal = val.split("").reverse().join("");
 
   $: {
     console.log(val);
@@ -228,7 +228,7 @@ import HelloWorld from './HelloWorld.svelte';
 <script>
   let val = '';
 
-  $: reverseVal: val.split("").reverse().join("");
+  $: reverseVal = val.split("").reverse().join("");
 
   // updates document.title whenever reverseVal changes
   $: document.title = reverseVal;
