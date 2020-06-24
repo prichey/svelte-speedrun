@@ -12,7 +12,7 @@ export const theme = {
 }
 
 # svelte speedrun
-### 06/24/20
+### preston richey | 06/24/20
 
 ---
 
@@ -187,21 +187,6 @@ import HelloWorld from './HelloWorld.svelte';
 <input bind:value={val} />
 ```
 
---- 
-
-# reactive statements !
-
-```svelte
-// Input.svelte
-<script>
-  let val = '';
-
-  $: document.title = val;
-</script>
-
-<input bind:value={val} />
-```
-
 ---
 
 <Layout>
@@ -328,6 +313,14 @@ import HelloWorld from './HelloWorld.svelte';
 
 ---
 
+# templates ctd
+
+* `{#if expression}...{:else if expression}...{/if}`
+* `{@html expression}`
+* `{@debug var1, var2, ..., varN}`
+
+---
+
 # lifecycle
 
 ```svelte
@@ -347,6 +340,38 @@ import HelloWorld from './HelloWorld.svelte';
 
 ---
 
+# event dispatchers
+
+```svelte
+// Child.svelte
+<script>
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
+</script>
+
+<button on:click="{() => dispatch('notify', 'detail value')}">Fire Event</button>
+```
+
+---
+
+# custom events
+
+```svelte
+// Parent.svelte
+<script>
+  import Child from './Child.svelte'
+
+  const handleNotify = event => {
+    console.log(`Notify fired! Detail: ${event.detail}`)
+  }
+</script>
+
+<Child on:notify={handleNotify} />
+```
+
+---
+
 # lots more!
 
 * `<svelte:head>`
@@ -362,9 +387,11 @@ import HelloWorld from './HelloWorld.svelte';
 # what's not to like?
 
 * no TS support (yet!)
-* no mdx-deck
+* no mdx-deck :(
 * smaller community, doesn't have critical mass of React
 
 ---
 
 # thanks!
+
+### [slides](https://svelte-speedrun.netlify.app/)
